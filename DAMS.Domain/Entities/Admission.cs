@@ -4,6 +4,15 @@ namespace DAMS.Domain.Entities
 {
     public class Admission
     {
+        private const string InvalidApproveMessage =
+        "Admission must be in review to be approved.";
+
+        private const string InvalidStartReviewMessage =
+            "Admission must be pending to start review.";
+
+        private const string InvalidRejectMessage =
+            "Approved admission cannot be rejected.";
+
         public Guid Id { get; private set; }
         public string CandidateName { get; private set; } = string.Empty;
         public AdmissionStatus Status { get; private set; }
@@ -43,14 +52,14 @@ namespace DAMS.Domain.Entities
         public void StartReview()
         {
             if (Status != AdmissionStatus.Pending)
-                throw new InvalidOperationException("Admission must be pending to start review.");
+                throw new InvalidOperationException(InvalidStartReviewMessage);
 
             Status = AdmissionStatus.InReview;
         }
         public void Approve()
         {
             if (Status != AdmissionStatus.InReview)
-                throw new InvalidOperationException("Admission must be in review to be approved.");
+                throw new InvalidOperationException(InvalidApproveMessage);
 
             Status = AdmissionStatus.Approved;
         }
@@ -58,7 +67,7 @@ namespace DAMS.Domain.Entities
         public void Reject()
         {
             if (Status == AdmissionStatus.Approved)
-                throw new InvalidOperationException("Approved admission cannot be rejected.");
+                throw new InvalidOperationException(InvalidApproveMessage);
 
             Status = AdmissionStatus.Rejected;
         }
