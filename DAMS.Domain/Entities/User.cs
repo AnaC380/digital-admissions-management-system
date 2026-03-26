@@ -3,9 +3,9 @@
     public class User
     {
         public Guid Id { get; private set; }
-        public string Name { get; private set; }
-        public string Email { get; private set; }
-        public string Role { get; private set; }
+        public string Name { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Role { get; set; } = string.Empty;
 
         protected User() { }
 

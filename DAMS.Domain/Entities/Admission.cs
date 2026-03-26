@@ -5,7 +5,7 @@ namespace DAMS.Domain.Entities
     public class Admission
     {
         private const string InvalidApproveMessage =
-        "Admission must be in review to be approved.";
+            "Admission must be in review to be approved.";
 
         private const string InvalidStartReviewMessage =
             "Admission must be pending to start review.";
@@ -23,19 +23,19 @@ namespace DAMS.Domain.Entities
 
         public ICollection<Document> Documents { get; private set; } = new List<Document>();
 
-
         protected Admission() { }
 
-        public Admission(string candidateName, User createdBy)
+        public Admission(string candidateName, Guid createdByUserId)
         {
             if (string.IsNullOrWhiteSpace(candidateName))
                 throw new ArgumentException("Candidate name is required.", nameof(candidateName));
 
+            if (createdByUserId == Guid.Empty)
+                throw new ArgumentException("Created by user ID is required.", nameof(createdByUserId));
+
             Id = Guid.NewGuid();
             CandidateName = candidateName;
-            CreatedBy = createdBy ?? throw new ArgumentNullException(nameof(createdBy));
-
-            CreatedByUserId = createdBy.Id;
+            CreatedByUserId = createdByUserId;
             Status = AdmissionStatus.Pending;
             CreatedAt = DateTime.UtcNow;
         }
@@ -48,7 +48,6 @@ namespace DAMS.Domain.Entities
             Documents.Add(document);
         }
 
-
         public void StartReview()
         {
             if (Status != AdmissionStatus.Pending)
@@ -56,6 +55,7 @@ namespace DAMS.Domain.Entities
 
             Status = AdmissionStatus.InReview;
         }
+
         public void Approve()
         {
             if (Status != AdmissionStatus.InReview)
@@ -67,7 +67,7 @@ namespace DAMS.Domain.Entities
         public void Reject()
         {
             if (Status == AdmissionStatus.Approved)
-                throw new InvalidOperationException(InvalidApproveMessage);
+                throw new InvalidOperationException(InvalidRejectMessage);
 
             Status = AdmissionStatus.Rejected;
         }

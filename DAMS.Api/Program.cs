@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using DAMS.Infrastructure.Persistence;
+using System.Diagnostics;
+using Microsoft.OpenApi; // Opcional, dependendo do uso real
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,12 +14,42 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<DamsDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Adicionar configuração do Swagger
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Digital Admissions Management System API",
+        Version = "v1",
+        Description = "API para gerenciar admissões digitais."
+    });
+});
+
+// Adicionar suporte a CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("DevelopmentCorsPolicy", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure o middleware de CORS apenas em ambiente de desenvolvimento
 if (app.Environment.IsDevelopment())
 {
+    app.UseCors("DevelopmentCorsPolicy");
+
     app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "DAMS API v1");
+        c.RoutePrefix = string.Empty; // Swagger será exibido na raiz do aplicativo
+    });
 }
 
 // app.UseHttpsRedirection();
@@ -45,7 +77,13 @@ app.MapGet("/weatherforecast", () =>
 
 app.Run();
 
+[DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 {
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+
+    private string GetDebuggerDisplay()
+    {
+        return ToString();
+    }
+}
