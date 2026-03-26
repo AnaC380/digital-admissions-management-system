@@ -258,37 +258,21 @@ Edite o arquivo `DAMS.Api/appsettings.json`:
 
 \*\*Opção A — SQL Server Express (local):\*\*
 
-```json
-
 {
-
-&#x20; "ConnectionStrings": {
-
-&#x20;   "DefaultConnection": "Server=.\\\\SQLEXPRESS;Database=DAMS\_DB;Trusted\_Connection=True;TrustServerCertificate=True;Integrated Security=True;"
-
-&#x20; }
-
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=.\\SQLEXPRESS;Database=DAMS_DB;Trusted_Connection=True;TrustServerCertificate=True;Integrated Security=True;"
+  }
 }
-
-```
 
 
 
 \*\*Opção B — Docker:\*\*
 
-```json
-
 {
-
-&#x20; "ConnectionStrings": {
-
-&#x20;   "DefaultConnection": "Server=localhost,1433;Database=DAMS\_DB;User Id=sa;Password=SUA_SENHA_AQUI;TrustServerCertificate=True"
-
-&#x20; }
-
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost,1433;Database=DAMS_DB;User Id=sa;Password=SUA_SENHA_AQUI;TrustServerCertificate=True"
+  }
 }
-
-```
 
 
 
@@ -412,14 +396,8 @@ docker logs dams-sqlserver
 
 
 
-```bash
-
-docker exec -it dams-sqlserver /opt/mssql-tools18/bin/sqlcmd \\
-
-&#x20; -S localhost -U sa -P "SUA_SENHA_AQUI" -C
-
-```
-
+docker exec -it dams-sqlserver /opt/mssql-tools18/bin/sqlcmd \
+  -S localhost -U sa -P "SUA_SENHA_AQUI" -C
 
 
 \### Parar o container
@@ -466,43 +444,21 @@ dotnet test /p:CollectCoverage=true
 
 
 
-```bash
+# Criar nova migration
+dotnet ef migrations add NomeDaMigration \
+  --project DAMS.Infrastructure --startup-project DAMS.Api
 
-\# Criar nova migration
+# Aplicar migrations
+dotnet ef database update \
+  --project DAMS.Infrastructure --startup-project DAMS.Api
 
-dotnet ef migrations add NomeDaMigration \\
+# Reverter última migration
+dotnet ef migrations remove \
+  --project DAMS.Infrastructure --startup-project DAMS.Api
 
-&#x20; --project DAMS.Infrastructure --startup-project DAMS.Api
-
-
-
-\# Aplicar migrations
-
-dotnet ef database update \\
-
-&#x20; --project DAMS.Infrastructure --startup-project DAMS.Api
-
-
-
-\# Reverter última migration
-
-dotnet ef migrations remove \\
-
-&#x20; --project DAMS.Infrastructure --startup-project DAMS.Api
-
-
-
-\# Ver histórico
-
-dotnet ef migrations list \\
-
-&#x20; --project DAMS.Infrastructure --startup-project DAMS.Api
-
-```
-
-
-
-\---
+# Ver histórico
+dotnet ef migrations list \
+  --project DAMS.Infrastructure --startup-project DAMS.Api
 
 
 
@@ -530,37 +486,17 @@ dotnet ef migrations list \\
 
 
 
-```bash
+# Ver tabelas
+sqlcmd -S .\SQLEXPRESS -d DAMS_DB \
+  -Q "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES"
 
-\# Ver tabelas
+# Ver admissões
+sqlcmd -S .\SQLEXPRESS -d DAMS_DB \
+  -Q "SELECT * FROM Admissions"
 
-sqlcmd -S .\\SQLEXPRESS -d DAMS\_DB \\
-
-&#x20; -Q "SELECT TABLE\_NAME FROM INFORMATION\_SCHEMA.TABLES"
-
-
-
-\# Ver admissões
-
-sqlcmd -S .\\SQLEXPRESS -d DAMS\_DB \\
-
-&#x20; -Q "SELECT \* FROM Admissions"
-
-
-
-\# Ver usuários
-
-sqlcmd -S .\\SQLEXPRESS -d DAMS\_DB \\
-
-&#x20; -Q "SELECT \* FROM Users"
-
-```
-
-
-
-\---
-
-
+# Ver usuários
+sqlcmd -S .\SQLEXPRESS -d DAMS_DB \
+  -Q "SELECT * FROM Users"
 
 \## 🤝 Contribuindo
 
