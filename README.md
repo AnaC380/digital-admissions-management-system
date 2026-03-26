@@ -6,13 +6,11 @@
 
 
 
-!\[.NET](https://img.shields.io/badge/.NET-10.0-512BD4?style=for-the-badge\&logo=dotnet)
 
-!\[SQL Server](https://img.shields.io/badge/SQL\_Server-Express-CC2927?style=for-the-badge\&logo=microsoftsqlserver)
-
-!\[Swagger](https://img.shields.io/badge/Swagger-OAS\_3.0-85EA2D?style=for-the-badge\&logo=swagger)
-
-!\[License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?style=for-the-badge&logo=dotnet)
+![SQL Server](https://img.shields.io/badge/SQL_Server-Express-CC2927?style=for-the-badge&logo=microsoftsqlserver)
+![Swagger](https://img.shields.io/badge/Swagger-OAS_3.0-85EA2D?style=for-the-badge&logo=swagger)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
 
 
