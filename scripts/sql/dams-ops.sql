@@ -11,10 +11,10 @@ FROM sys.databases WHERE name = 'DAMS_DB';
 
 SELECT
     t.name AS TableName,
-    p.rows AS RowCount,
+    p.rows AS [RowCount],
     CAST(a.total_pages * 8 / 1024.0 AS DECIMAL(10,2)) AS TotalSizeMB
 FROM sys.tables t
-JOIN sys.indexes i ON t.object_id = i.obj
+JOIN sys.indexes i ON t.object_id = i.object_id
 JOIN sys.partitions p ON i.object_id = p.object_id AND i.index_id = p.index_id
 JOIN sys.allocation_units a ON p.partition_id = a.container_id
 WHERE t.is_ms_shipped = 0
@@ -30,7 +30,7 @@ DECLARE @BackupPath NVARCHAR(500);
 DECLARE @BackupFile NVARCHAR(500);
 DECLARE @Timestamp  NVARCHAR(20);
 SET @Timestamp  = REPLACE(REPLACE(CONVERT(VARCHAR, GETDATE(), 120), ':', ''), ' ', '_');
-SET @BackupPath = 'C:\Backups\DAMS\';
+SET @BackupPath = '';
 SET @BackupFile = @BackupPath + 'DAMS_DB_FULL_' + @Timestamp + '.bak';
 PRINT 'Iniciando backup FULL: ' + @BackupFile;
 BACKUP DATABASE DAMS_DB TO DISK = @BackupFile

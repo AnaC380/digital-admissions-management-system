@@ -1,0 +1,178 @@
+{
+  "settings": {
+    "components": {
+      "code": false,
+      "binaries": false
+    },
+    "targetId": "net10.0",
+    "targetDisplayName": ".NETCoreApp,Version=v10.0"
+  },
+  "analysisStartTime": "2026-03-26T15:56:53.7132493Z",
+  "analysisEndTime": "2026-03-26T15:56:54.4121113Z",
+  "privacyModeHelpUrl": "https://go.microsoft.com/fwlink/?linkid=2270980",
+  "stats": {
+    "summary": {
+      "projects": 5,
+      "issues": 0,
+      "incidents": 0,
+      "effort": 0
+    },
+    "charts": {
+      "severity": {
+        "Mandatory": 0,
+        "Optional": 0,
+        "Potential": 0,
+        "Information": 0
+      },
+      "category": {}
+    }
+  },
+  "projects": [
+    {
+      "path": "DAMS.Api\\DAMS.Api.csproj",
+      "startingProject": true,
+      "issues": 0,
+      "storyPoints": 0,
+      "properties": {
+        "appName": "DAMS.Api",
+        "projectKind": "AspNetCore",
+        "frameworks": [
+          "net10.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 50,
+        "numberOfCodeFiles": 2,
+        "linesTotal": 111497,
+        "linesOfCode": 152,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [],
+      "features": []
+    },
+    {
+      "path": "DAMS.Application\\DAMS.Application.csproj",
+      "startingProject": true,
+      "issues": 0,
+      "storyPoints": 0,
+      "properties": {
+        "appName": "DAMS.Application",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "net10.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 1,
+        "numberOfCodeFiles": 1,
+        "linesTotal": 11,
+        "linesOfCode": 11,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [],
+      "features": []
+    },
+    {
+      "path": "DAMS.Domain\\DAMS.Domain.csproj",
+      "startingProject": true,
+      "issues": 0,
+      "storyPoints": 0,
+      "properties": {
+        "appName": "DAMS.Domain",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "net10.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 4,
+        "numberOfCodeFiles": 4,
+        "linesTotal": 137,
+        "linesOfCode": 137,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [],
+      "features": []
+    },
+    {
+      "path": "DAMS.Infrastructure\\DAMS.Infrastructure.csproj",
+      "startingProject": true,
+      "issues": 0,
+      "storyPoints": 0,
+      "properties": {
+        "appName": "DAMS.Infrastructure",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "net10.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 7,
+        "numberOfCodeFiles": 7,
+        "linesTotal": 476,
+        "linesOfCode": 476,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [],
+      "features": []
+    },
+    {
+      "path": "DAMS.Tests\\DAMS.Tests.csproj",
+      "startingProject": true,
+      "issues": 0,
+      "storyPoints": 0,
+      "properties": {
+        "appName": "DAMS.Tests",
+        "projectKind": "DotNetCoreApp",
+        "frameworks": [
+          "net10.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 3,
+        "numberOfCodeFiles": 1,
+        "linesTotal": 1805,
+        "linesOfCode": 10,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [],
+      "features": []
+    }
+  ],
+  "rules": {}
+}
