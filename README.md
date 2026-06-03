@@ -1,57 +1,127 @@
-# 🎓 DAMS - Digital Admissions Management System
-
-> Sistema de gerenciamento digital de admissões para instituições de ensino, desenvolvido com .NET 10 e Clean Architecture.
-
-![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?style=for-the-badge&logo=dotnet)
-![SQL Server](https://img.shields.io/badge/SQL_Server-Express-CC2927?style=for-the-badge&logo=microsoftsqlserver)
-![Swagger](https://img.shields.io/badge/Swagger-OAS_3.0-85EA2D?style=for-the-badge&logo=swagger)
-![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
-
+# 🎓 DAMS — Digital Admissions Management System
+ 
+Sistema de gerenciamento digital de admissões para instituições de ensino, desenvolvido com **.NET 10** e **Clean Architecture**.
+ 
+![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?style=flat-square&logo=dotnet)
+![SQL Server](https://img.shields.io/badge/SQL%20Server-2022-CC2927?style=flat-square&logo=microsoftsqlserver)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat-square&logo=docker)
+![Azure](https://img.shields.io/badge/Azure-SQL%20Database-0078D4?style=flat-square&logo=microsoftazure)
+![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-2088FF?style=flat-square&logo=githubactions)
+![JWT](https://img.shields.io/badge/Auth-JWT%20Bearer-000000?style=flat-square&logo=jsonwebtokens)
+![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
+ 
 ---
-
+ 
 ## 📋 Sobre o Projeto
-
-O **DAMS** é uma API REST para gerenciar processos de admissão de candidatos em instituições de ensino. O sistema permite controle completo sobre candidatos, documentos e usuários envolvidos no processo seletivo, com rastreabilidade e auditoria em todas as operações.
-
+ 
+O DAMS é uma API REST para gerenciar processos de admissão de candidatos em instituições de ensino. O sistema permite controle completo sobre candidatos, documentos e usuários envolvidos no processo seletivo, com rastreabilidade, auditoria em todas as operações e autenticação segura via JWT.
+ 
+O projeto foi desenvolvido com foco em **operação de ambientes produtivos**, incluindo scripts de DBA, automação PowerShell, pipeline de CI/CD e infraestrutura provisionada no Azure.
+ 
 ---
-
+ 
 ## ✨ Funcionalidades
-
+ 
+- ✅ Autenticação e autorização com JWT Bearer
 - ✅ Gerenciamento de candidatos e admissões
-- 📄 Controle de documentos por admissão
-- 👥 Sistema de usuários com perfis e permissões
-- 🔍 Rastreamento de status das admissões
-- 📊 Auditoria completa com timestamps
-- 📖 Documentação interativa via Swagger UI
-
+- ✅ Controle de documentos por admissão
+- ✅ Sistema de usuários com perfis e permissões
+- ✅ Rastreamento de status das admissões
+- ✅ Auditoria completa com timestamps
+- ✅ Scripts de operação de banco de dados (backup, health check, performance)
+- ✅ Automação de rotinas via PowerShell
+- ✅ Pipeline CI/CD com GitHub Actions
+- ✅ Banco de dados provisionado no Azure SQL Database
+- 📖 Documentação interativa via OpenAPI
 ---
-
+ 
 ## 🏗️ Arquitetura
-
+ 
 O projeto segue os princípios de **Clean Architecture** e **Domain-Driven Design (DDD)**:
-
+ 
 ```
-backend/
-├── DAMS.Domain/           # Entidades e regras de negócio
-├── DAMS.Application/      # Casos de uso e lógica de aplicação
-├── DAMS.Infrastructure/   # Persistência e configurações do EF Core
-├── DAMS.Api/              # API REST — Controllers e endpoints
-└── DAMS.Tests/            # Testes unitários e de integração
+digital-admissions-management-system/
+├── .github/
+│   └── workflows/
+│       └── ci.yml                    # Pipeline CI/CD — build, migrations, testes
+└── backend/
+    ├── DAMS.Api/                     # Camada de entrada — Controllers e endpoints
+    │   ├── Controllers/
+    │   │   ├── AdmissionsController.cs
+    │   │   └── AuthController.cs     # Endpoints de registro e login JWT
+    │   ├── appsettings.json          # Connection string e configurações JWT
+    │   └── Program.cs                # Pipeline da aplicação
+    ├── DAMS.Application/             # Casos de uso e lógica de aplicação
+    │   ├── DTOs/
+    │   │   ├── Auth/
+    │   │   │   └── AuthDtos.cs       # RegisterRequest, LoginRequest, AuthResponse
+    │   │   └── AdmissionDto.cs
+    │   └── Interfaces/
+    │       └── ITokenService.cs      # Contrato do serviço JWT
+    ├── DAMS.Domain/                  # Entidades e regras de negócio
+    │   └── Entities/
+    │       ├── User.cs               # Entidade com PasswordHash
+    │       ├── Admission.cs
+    │       └── Document.cs
+    ├── DAMS.Infrastructure/          # Persistência, serviços externos
+    │   ├── Persistence/
+    │   │   └── DamsDbContext.cs
+    │   ├── Migrations/               # Migrations EF Core
+    │   └── Services/
+    │       └── TokenService.cs       # Geração do JWT
+    ├── DAMS.Tests/                   # Testes unitários e de integração
+    └── scripts/
+        ├── sql/
+        │   └── dams-ops.sql          # Health check, backup, performance, índices
+        └── powershell/
+            └── dams-ops.ps1          # Automação: HealthCheck, Backup, CheckContainer
 ```
-
-### 🎯 Princípios Aplicados
-
+ 
+### Princípios Aplicados
+ 
 - **Separation of Concerns** — cada camada tem responsabilidade única
 - **Dependency Inversion** — dependências apontam para abstrações
 - **SOLID Principles** — código limpo e manutenível
 - **Repository Pattern** — abstração de acesso a dados
-
 ---
-
+ 
+## 🔐 Autenticação JWT
+ 
+A API utiliza **JWT Bearer Token** para autenticação. O fluxo é:
+ 
+```
+POST /api/auth/register  →  cria usuário com senha hasheada (BCrypt)  →  retorna token
+POST /api/auth/login     →  valida credenciais  →  retorna token
+GET  /api/admissions     →  requer header: Authorization: Bearer {token}
+```
+ 
+### Estrutura do Token
+ 
+```json
+{
+  "sub": "guid-do-usuario",
+  "email": "usuario@email.com",
+  "name": "Nome do Usuário",
+  "role": "Admin",
+  "exp": 1234567890
+}
+```
+ 
+---
+ 
 ## 🗄️ Modelo de Dados
-
+ 
 ### Entidades Principais
-
+ 
+**User**
+```
+Id:            Guid (PK)
+Name:          string
+Email:         string
+Role:          string
+PasswordHash:  string  ← BCrypt hash
+```
+ 
 **Admission**
 ```
 Id:               Guid (PK)
@@ -61,7 +131,7 @@ CreatedAt:        DateTime
 CreatedByUserId:  Guid (FK → Users)
 Documents:        ICollection<Document>
 ```
-
+ 
 **Document**
 ```
 Id:           Guid (PK)
@@ -71,237 +141,308 @@ FilePath:     string
 FileType:     string
 UploadedAt:   DateTime
 ```
-
-**User**
-```
-Id:     Guid (PK)
-Name:   string
-Email:  string
-Role:   string
-```
-
-### 🔗 Relacionamentos
-- `Admission` **1:N** `Documents` — uma admissão pode ter múltiplos documentos
-- `User` **1:N** `Admissions` — um usuário pode criar múltiplas admissões
+ 
+### Relacionamentos
+ 
+- `Admission 1:N Documents` — uma admissão pode ter múltiplos documentos
+- `User 1:N Admissions` — um usuário pode criar múltiplas admissões
 - Deleção em cascata configurada via EF Core
-
 ---
-
+ 
 ## 🚀 Tecnologias Utilizadas
-
+ 
 | Tecnologia | Versão | Uso |
 |---|---|---|
 | .NET | 10.0 | Framework principal |
 | ASP.NET Core | 10.0 | API REST |
 | Entity Framework Core | 10.0 | ORM |
-| SQL Server Express | 2022+ | Banco de dados |
-| Swashbuckle | 10.1.5 | Swagger UI |
-| xUnit | - | Testes |
-
+| SQL Server | 2022 | Banco de dados (Docker e Azure) |
+| BCrypt.Net-Next | 4.2.0 | Hash de senhas |
+| Microsoft.AspNetCore.Authentication.JwtBearer | 10.0.8 | Autenticação JWT |
+| xUnit | — | Testes |
+| Docker | — | Containerização do SQL Server |
+| GitHub Actions | — | CI/CD |
+| Microsoft Azure | — | SQL Database em nuvem |
+ 
 ---
-
+ 
+## ☁️ Infraestrutura Azure
+ 
+O banco de dados está provisionado no **Azure SQL Database**:
+ 
+| Recurso | Nome | Região |
+|---|---|---|
+| Resource Group | `rg-dams` | Brazil South |
+| SQL Server | `dams-sqlserver.database.windows.net` | Brazil South |
+| SQL Database | `DAMS_DB` | Brazil South |
+| App Service | `dams-api` | East US |
+ 
+### Connection String Azure
+ 
+```json
+"ConnectionStrings": {
+  "DefaultConnection": "Server=dams-sqlserver.database.windows.net;Database=DAMS_DB;User Id=sqladmin;Password=***;TrustServerCertificate=True"
+}
+```
+ 
+---
+ 
 ## 📦 Pré-requisitos
-
-- [.NET SDK 10.0](https://dotnet.microsoft.com/download)
-- [SQL Server Express](https://www.microsoft.com/pt-br/sql-server/sql-server-downloads) ou [Docker Desktop](https://www.docker.com/products/docker-desktop/)
-- [Git](https://git-scm.com/downloads)
-- [dotnet-ef](https://learn.microsoft.com/pt-br/ef/core/cli/dotnet) (ferramenta de migrations)
-
+ 
+- .NET SDK 10.0
+- Docker Desktop
+- Git
+- `dotnet-ef` (ferramenta de migrations)
+```bash
+dotnet tool install --global dotnet-ef
+```
+ 
 ---
-
+ 
 ## ⚙️ Configuração e Instalação
-
+ 
 ### 1. Clone o repositório
-
+ 
 ```bash
 git clone https://github.com/AnaC380/digital-admissions-management-system.git
 cd digital-admissions-management-system/backend
 ```
-
-### 2. Instale a ferramenta de migrations
-
-```bash
-dotnet tool install --global dotnet-ef
-```
-
-### 3. Configure a string de conexão
-
-Edite o arquivo `DAMS.Api/appsettings.json`:
-
-**Opção A — SQL Server Express (local):**
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=.\\SQLEXPRESS;Database=DAMS_DB;Trusted_Connection=True;TrustServerCertificate=True;Integrated Security=True;"
-  }
-}
-```
-
-**Opção B — Docker:**
+ 
+### 2. Configure o `appsettings.json`
+ 
 ```json
 {
   "ConnectionStrings": {
     "DefaultConnection": "Server=localhost,1433;Database=DAMS_DB;User Id=sa;Password=SUA_SENHA_AQUI;TrustServerCertificate=True"
+  },
+  "JwtSettings": {
+    "SecretKey": "YOUR_SECRET_KEY_HERE",
+    "Issuer": "DAMS.Api",
+    "Audience": "DAMS.Client",
+    "ExpiresInHours": "8"
   }
 }
 ```
-
-### 4. Suba o banco de dados (se usar Docker)
-
+ 
+### 3. Suba o banco de dados
+ 
 ```bash
 docker-compose up -d
 ```
-> Aguarde ~30 segundos para o SQL Server inicializar.
-
-### 5. Aplique as migrations
-
+ 
+Aguarde ~30 segundos para o SQL Server inicializar.
+ 
+### 4. Aplique as migrations
+ 
 ```bash
 dotnet ef database update --project DAMS.Infrastructure --startup-project DAMS.Api
 ```
-
-### 6. Execute o projeto
-
+ 
+### 5. Execute o projeto
+ 
 ```bash
 cd DAMS.Api
 dotnet run
 ```
-
+ 
 A API estará disponível em:
-- 🌐 **http://localhost:5219**
-- 🔒 **https://localhost:7076**
-- 📖 **http://localhost:5219/index.html** ← Swagger UI
-
+ 
+- 🌐 `http://localhost:5219`
+- 📖 `http://localhost:5219/openapi/v1.json` ← OpenAPI
 ---
-
+ 
 ## 📖 Documentação da API
-
-Após executar o projeto, acesse o **Swagger UI**:
-
+ 
+### Autenticação
+ 
+| Método | Rota | Descrição | Auth |
+|---|---|---|---|
+| POST | `/api/auth/register` | Registra novo usuário | ❌ |
+| POST | `/api/auth/login` | Autentica e retorna token | ❌ |
+ 
+### Admissões
+ 
+| Método | Rota | Descrição | Auth |
+|---|---|---|---|
+| GET | `/api/admissions` | Lista todas as admissões | ✅ |
+| GET | `/api/admissions/{id}` | Busca admissão por ID | ✅ |
+ 
+### Exemplo de uso
+ 
+```bash
+# Registrar usuário
+curl -X POST http://localhost:5219/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Ana Carolina","email":"ana@dams.com","password":"SUA_SENHA_AQUI","role":"Admin"}'
+ 
+# Login
+curl -X POST http://localhost:5219/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"ana@dams.com","password":"SUA_SENHA_AQUI"}'
+ 
+# Acessar endpoint protegido
+curl http://localhost:5219/api/admissions \
+  -H "Authorization: Bearer {token}"
 ```
-http://localhost:5219/index.html
-```
-
-### Endpoints disponíveis
-
-| Método | Rota | Descrição |
-|---|---|---|
-| `GET` | `/api/Admissions` | Lista todas as admissões |
-| `GET` | `/api/Admissions/{id}` | Busca admissão por ID (GUID) |
-
+ 
 ---
-
+ 
 ## 🐳 Docker
-
-### Subir o SQL Server
-
+ 
 ```bash
+# Subir o SQL Server
 docker-compose up -d
-```
-
-### Verificar logs
-
-```bash
+ 
+# Verificar status
+docker ps
+ 
+# Verificar logs
 docker logs dams-sqlserver
-```
-
-### Conectar via terminal
-
-```bash
+ 
+# Conectar via terminal
 docker exec -it dams-sqlserver /opt/mssql-tools18/bin/sqlcmd \
   -S localhost -U sa -P "SUA_SENHA_AQUI" -C
-```
-
-### Parar o container
-
-```bash
+ 
+# Parar o container
 docker-compose down
 ```
-
+ 
 ---
-
+ 
+## 🛠️ Scripts de Operação (DBA)
+ 
+### Health Check e Backup — SQL
+ 
+```bash
+# Via SSMS ou Azure Data Studio
+# Abrir: scripts/sql/dams-ops.sql
+ 
+# Via terminal (Docker)
+docker exec -it dams-sqlserver /opt/mssql-tools18/bin/sqlcmd \
+  -S localhost -U sa -P "SUA_SENHA_AQUI" -C \
+  -i /scripts/sql/dams-ops.sql
+```
+ 
+O script `dams-ops.sql` executa:
+- Health check do banco (status, tamanho de tabelas, conexões ativas)
+- Backup Full com timestamp automático
+- Monitoramento de queries custosas
+- Verificação de fragmentação de índices
+### Automação PowerShell
+ 
+```powershell
+# Health check completo
+.\scripts\powershell\dams-ops.ps1 -Action HealthCheck
+ 
+# Backup com limpeza automática (> 7 dias)
+.\scripts\powershell\dams-ops.ps1 -Action Backup
+ 
+# Verificar container Docker
+.\scripts\powershell\dams-ops.ps1 -Action CheckContainer
+ 
+# Executar tudo
+.\scripts\powershell\dams-ops.ps1 -Action All
+```
+ 
+---
+ 
+## 🔍 Explorando o Banco de Dados
+ 
+### Via SSMS ou Azure Data Studio
+ 
+```
+Server: localhost,1433  (local)  |  dams-sqlserver.database.windows.net  (Azure)
+Authentication: SQL Login
+Login: sa  |  sqladmin
+Database: DAMS_DB
+```
+ 
+### Via Terminal
+ 
+```bash
+# Ver tabelas
+sqlcmd -S localhost,1433 -U sa -P "SUA_SENHA_AQUI" -C \
+  -Q "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='BASE TABLE'"
+ 
+# Ver usuários cadastrados
+sqlcmd -S localhost,1433 -U sa -P "SUA_SENHA_AQUI" -C \
+  -Q "SELECT Id, Name, Email, Role FROM Users"
+```
+ 
+---
+ 
 ## 🧪 Testes
-
+ 
 ```bash
 # Executar todos os testes
 dotnet test
-
+ 
 # Com cobertura de código
 dotnet test /p:CollectCoverage=true
 ```
-
+ 
 ---
-
+ 
 ## 📊 Migrations
-
+ 
 ```bash
 # Criar nova migration
 dotnet ef migrations add NomeDaMigration \
   --project DAMS.Infrastructure --startup-project DAMS.Api
-
+ 
 # Aplicar migrations
 dotnet ef database update \
   --project DAMS.Infrastructure --startup-project DAMS.Api
-
+ 
 # Reverter última migration
 dotnet ef migrations remove \
   --project DAMS.Infrastructure --startup-project DAMS.Api
-
+ 
 # Ver histórico
 dotnet ef migrations list \
   --project DAMS.Infrastructure --startup-project DAMS.Api
 ```
-
+ 
 ---
-
-## 🔍 Explorando o Banco de Dados
-
-### Via Azure Data Studio (recomendado)
-
-1. Baixe o [Azure Data Studio](https://azure.microsoft.com/pt-br/products/data-studio)
-2. Conecte com:
-   - **Server:** `.\SQLEXPRESS` ou `localhost,1433`
-   - **Authentication:** Windows ou SQL Login
-   - **Database:** `DAMS_DB`
-
-### Via Terminal (sqlcmd)
-
-```bash
-# Ver tabelas
-sqlcmd -S .\SQLEXPRESS -d DAMS_DB \
-  -Q "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES"
-
-# Ver admissões
-sqlcmd -S .\SQLEXPRESS -d DAMS_DB \
-  -Q "SELECT * FROM Admissions"
-
-# Ver usuários
-sqlcmd -S .\SQLEXPRESS -d DAMS_DB \
-  -Q "SELECT * FROM Users"
-```
-
+ 
+## 🔁 CI/CD — GitHub Actions
+ 
+O pipeline `.github/workflows/ci.yml` executa automaticamente a cada push/PR:
+ 
+1. Sobe SQL Server 2022 como service container
+2. Restaura dependências e compila a solution
+3. Aplica migrations automaticamente
+4. Executa todos os testes com relatório de cobertura
+5. Valida o `docker-compose.yml`
 ---
-
+ 
+## 📝 Roadmap
+ 
+- [x] Configuração inicial do projeto
+- [x] Implementação das entidades de domínio
+- [x] Configuração do Entity Framework Core
+- [x] Migrations iniciais
+- [x] Implementação dos Controllers
+- [x] Documentação da API (OpenAPI)
+- [x] Autenticação e Autorização (JWT)
+- [x] Scripts de operação de banco de dados (DBA)
+- [x] Automação de rotinas operacionais (PowerShell)
+- [x] CI/CD com GitHub Actions
+- [x] Infraestrutura Azure (SQL Database)
+- [ ] Upload de documentos
+- [ ] Paginação e filtros nos endpoints
+- [ ] Frontend em React
+- [ ] Testes de integração
+- [ ] Deploy da API em Azure App Service
+---
+ 
 ## 🤝 Contribuindo
-
-Contribuições são bem-vindas! Siga estes passos:
-
+ 
 1. Fork o projeto
-2. Crie uma branch para sua feature
-   ```bash
-   git checkout -b feature/MinhaFeature
-   ```
-3. Commit suas mudanças
-   ```bash
-   git commit -m 'feat: adiciona MinhaFeature'
-   ```
-4. Push para a branch
-   ```bash
-   git push origin feature/MinhaFeature
-   ```
-5. Abra um **Pull Request**
-
-### Padrões de Commit
-
+2. Crie uma branch: `git checkout -b feature/MinhaFeature`
+3. Commit: `git commit -m 'feat: adiciona MinhaFeature'`
+4. Push: `git push origin feature/MinhaFeature`
+5. Abra um Pull Request
 | Prefixo | Uso |
 |---|---|
 | `feat:` | Nova funcionalidade |
@@ -310,56 +451,24 @@ Contribuições são bem-vindas! Siga estes passos:
 | `refactor:` | Refatoração |
 | `test:` | Testes |
 | `chore:` | Manutenção |
-
+| `ops:` | Scripts de operação/infra |
+ 
 ---
-
-## 📝 Roadmap
-
-- [x] Configuração inicial do projeto
-- [x] Implementação das entidades de domínio
-- [x] Configuração do Entity Framework Core
-- [x] Migrations iniciais
-- [x] Implementação dos Controllers
-- [x] Documentação da API (Swagger UI)
-- [ ] Autenticação e Autorização (JWT)
-- [ ] Upload de documentos
-- [ ] Paginação e filtros nos endpoints
-- [ ] Frontend em React
-- [ ] CI/CD com GitHub Actions
-- [ ] Testes de integração
-- [ ] Deploy em Azure
-
----
-
-## 🐛 Problemas Conhecidos
-
-Consulte as [Issues](https://github.com/AnaC380/digital-admissions-management-system/issues) do projeto.
-
----
-
+ 
 ## 📄 Licença
-
+ 
 Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
+ 
 ---
-
+ 
 ## 👩‍💻 Autora
-
+ 
 **Ana Carolina**
-
-[![GitHub](https://img.shields.io/badge/GitHub-@AnaC380-181717?style=flat&logo=github)](https://github.com/AnaC380)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Ana_Carolina-0A66C2?style=flat&logo=linkedin)](https://www.linkedin.com/in/ana-carolina-salles-b31a3421a/)
-
+ 
+[![GitHub](https://img.shields.io/badge/GitHub-AnaC380-181717?style=flat-square&logo=github)](https://github.com/AnaC380)
+ 
 ---
-
-## 📞 Suporte
-
-Para reportar bugs ou solicitar features, abra uma [Issue](https://github.com/AnaC380/digital-admissions-management-system/issues).
-
----
-
-<div align="center">
-  ⭐ Se este projeto foi útil, considere dar uma estrela no repositório!
-  <br><br>
-  Desenvolvido com ❤️ usando .NET 10 e Clean Architecture
-</div>
+ 
+⭐ Se este projeto foi útil, considere dar uma estrela no repositório!
+ 
+*Desenvolvido com foco em operação de ambientes produtivos, infraestrutura em nuvem e boas práticas de DevOps.*
