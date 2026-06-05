@@ -482,3 +482,6 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# HTTP Client environment files (may contain tokens)
+**/http-client.env.json

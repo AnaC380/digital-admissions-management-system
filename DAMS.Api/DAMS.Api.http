@@ -1,6 +1,39 @@
 @DAMS.Api_HostAddress = http://localhost:5219
 
-GET {{DAMS.Api_HostAddress}}/weatherforecast/
+### Register
+POST {{DAMS.Api_HostAddress}}/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Ana Carolina",
+  "email": "ana@dams.com",
+  "password": "SUA_SENHA_AQUI",
+  "role": "Admin"
+}
+
+###
+
+### Login
+POST {{DAMS.Api_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "ana@dams.com",
+  "password": "SUA_SENHA_AQUI"
+}
+
+###
+
+### Get Admissions
+GET {{DAMS.Api_HostAddress}}/api/admissions
 Accept: application/json
+Authorization: Bearer {{token}}
+
+###
+
+### Get Admission by Id
+GET {{DAMS.Api_HostAddress}}/api/admissions/{{id}}
+Accept: application/json
+Authorization: Bearer {{token}}
 
 ###
