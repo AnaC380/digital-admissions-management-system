@@ -507,4 +507,8 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 
 ⭐ Se este projeto foi útil, considere dar uma estrela no repositório!
 
+<<<<<<< HEAD
 *Desenvolvido com foco em operação de ambientes produtivos, infraestrutura em nuvem e boas práticas de DevOps.*
+=======
+*Desenvolvido com foco em operação de ambientes produtivos, infraestrutura em nuvem e boas práticas de DevOps.*
+>>>>>>> 564d8b7b59e297b757ff1f2a0cc84284e64eb2c9
