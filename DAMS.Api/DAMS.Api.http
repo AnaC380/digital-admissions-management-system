@@ -1,6 +1,6 @@
 @DAMS.Api_HostAddress = http://localhost:5219
 
-### Register
+### 1. Registrar Usuário
 POST {{DAMS.Api_HostAddress}}/api/auth/register
 Content-Type: application/json
 
@@ -11,9 +11,7 @@ Content-Type: application/json
   "role": "Admin"
 }
 
-###
-
-### Login
+### 2. Login
 POST {{DAMS.Api_HostAddress}}/api/auth/login
 Content-Type: application/json
 
@@ -22,18 +20,12 @@ Content-Type: application/json
   "password": "SUA_SENHA_AQUI"
 }
 
-###
-
-### Get Admissions
+### 3. Get Admissions
 GET {{DAMS.Api_HostAddress}}/api/admissions
 Accept: application/json
-Authorization: Bearer {{token}}
+Authorization: Bearer <COLE_SEU_TOKEN_AQUI>
 
-###
-
-### Get Admission by Id
-GET {{DAMS.Api_HostAddress}}/api/admissions/{{id}}
+### 4. Get Admission by Id
+GET {{DAMS.Api_HostAddress}}/api/admissions/00000000-0000-0000-0000-000000000000
 Accept: application/json
-Authorization: Bearer {{token}}
-
-###
+Authorization: Bearer <COLE_SEU_TOKEN_AQUI>
