@@ -15,6 +15,8 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
+builder.Services.AddSwaggerGen();
+
 builder.Services.AddCors(options =>
     options.AddPolicy("DevelopmentCorsPolicy", p =>
         p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
@@ -41,6 +43,8 @@ if (app.Environment.IsDevelopment())
 {
     app.UseCors("DevelopmentCorsPolicy");
     app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseAuthentication();
