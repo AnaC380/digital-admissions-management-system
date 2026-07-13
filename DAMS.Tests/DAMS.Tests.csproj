@@ -18,4 +18,8 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DAMS.Domain\DAMS.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
