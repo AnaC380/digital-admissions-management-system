@@ -18,5 +18,12 @@
             Role = role;
             PasswordHash = passwordHash;
         }
+        public void SetRole(string role)
+    {
+        if (string.IsNullOrWhiteSpace(role))
+            throw new ArgumentException("Role não pode ser vazio.", nameof(role));
+
+        Role = role;
+        }
     }
 }
