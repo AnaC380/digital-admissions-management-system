@@ -499,3 +499,4 @@ $RECYCLE.BIN/
 # HTTP Client environment files (may contain tokens)
 **/http-client.env.json
 repomix-output.xml
+DAMS.Api/appsettings.json
